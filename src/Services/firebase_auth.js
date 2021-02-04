@@ -8,7 +8,7 @@ const gitLogin = async()=>{
     var user = authVal.user;
     var token = authVal.credential.accessToken;
     console.log(user);
-    firebaselib.createUser(user.email);
+    await firebaselib.createUser(user.email);
  return {user:user,token:token};
 
 };

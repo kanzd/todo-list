@@ -12,8 +12,22 @@
     width: 98%;
  
 }
+.cen
+{
+    margin:10%;
+}
 .sc
 {
     overflow-y: scroll;
     height: 300px;
 }
+ /* Hide scrollbar for Chrome, Safari and Opera */
+ .hidess::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .hidess {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  } 
