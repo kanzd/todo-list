@@ -1,0 +1,19 @@
+.buttonss{
+    height:70px;
+    width: 70px;
+    border-radius:70px;
+    position: fixed;
+    left:90%;
+    top:85%;
+}
+.rowp{
+    margin-left: 1%;
+    margin-top: 1%;
+    width: 98%;
+ 
+}
+.sc
+{
+    overflow-y: scroll;
+    height: 300px;
+}
