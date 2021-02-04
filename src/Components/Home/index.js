@@ -17,13 +17,14 @@ export default class index extends Component {
         deleteDoc: false,
         completedtodos: [],
         alltodos: [],
+        mount:true,
         Loading: true,
     };
     componentDidMount() {
         (async () => {
             var alltodos = await firebase_services.all(window.localStorage.getItem('docid'));
-            var pendingtodos = await firebase_services.pending(window.localStorage.getItem("docid"));
-            var completedtodos = await firebase_services.completed(window.localStorage.getItem('docid'));
+            // var pendingtodos = await firebase_services.pending(window.localStorage.getItem("docid"));
+            // var completedtodos = await firebase_services.completed(window.localStorage.getItem('docid'));
             var tempall = [];
             var temppending = [];
             var tempcompleted = [];
@@ -33,22 +34,22 @@ export default class index extends Component {
                 tempall = all;
                 this.setState({ alltodos: all });
             });
-            pendingtodos.forEach((value, index) => {
-                var pending = this.state.pendingtodos;
-                pending.push({ todo: value.data()["todo"], deadline: value.data()["deadline"], status: value.data()['status'], docid: value.ref.path });
-                temppending = pending;
+            // pendingtodos.forEach((value, index) => {
+            //     var pending = this.state.pendingtodos;
+            //     pending.push({ todo: value.data()["todo"], deadline: value.data()["deadline"], status: value.data()['status'], docid: value.ref.path });
+            //     temppending = pending;
 
-            });
-            completedtodos.forEach((value, index) => {
-                var all = this.state.completedtodos;
-                all.push({ todo: value.data()["todo"], deadline: value.data()["deadline"], status: value.data()['status'], docid: value.ref.path });
-                tempcompleted = all;
+            // });
+            // completedtodos.forEach((value, index) => {
+            //     var all = this.state.completedtodos;
+            //     all.push({ todo: value.data()["todo"], deadline: value.data()["deadline"], status: value.data()['status'], docid: value.ref.path });
+            //     tempcompleted = all;
 
-            });
-            this.setState({ alltodos: tempall, pendingtodos: temppending, completedtodos: tempcompleted, Loading: false });
+            // });
+            this.setState({ Loading: false });
             firebase_services.realTime(window.localStorage.getItem("docid"), (snap) => {
                 snap.docChanges().forEach((value, index) => {
-                    if ((value.doc.data()['status'] == "pending") && (!this.state.deleteDoc)) {
+                    if ((value.doc.data()['status'] == "pending")&&(!this.state.deleteDoc)) {
 
                         let temp = this.state.pendingtodos;
                         temp.push({ todo: value.doc.data()["todo"], deadline: value.doc.data()["deadline"], status: value.doc.data()['status'], docid: value.doc.ref.path });
@@ -71,6 +72,7 @@ export default class index extends Component {
                 })
             });
         })();
+        this.setState({mount:false});
     }
     model() {
         return (<Modal
