@@ -10,32 +10,47 @@ const createUser = async (email)=>{
     else
     window.localStorage.setItem('docid',doc.docs[0].ref.path);
 }
-const realTime = async (docid,callback)=>{
+const getProjects = async (docid)=>{
     var firestore = firebase.firestore();
     var doc = firestore.doc(docid);
-    doc.collection("todos").onSnapshot((snap)=>{
+    var dataref = await doc.get();
+    var data = dataref.data();
+    return data;
+}
+const createProject = async (docid,projectName,about)=>{
+    var firestore = firebase.firestore();
+    var doc =  firestore.doc(docid);
+    await doc.update({
+        [projectName]:about
+    });
+   
+}
+const realTime = async (docid,projectName,callback)=>{
+    var firestore = firebase.firestore();
+    var doc = firestore.doc(docid);
+    doc.collection(projectName).onSnapshot((snap)=>{
         callback(snap);
         
     })
 }
-const all = async (docid)=>{
+const all = async (docid,projectName)=>{
     var firestore = firebase.firestore();
     var doc = firestore.doc(docid);
-   var docs = await doc.collection('todos').orderBy('datetime').get();
+   var docs = await doc.collection(projectName).orderBy('datetime').get();
    return docs.docs;
 }
-const pending = async (docid)=>{
+const pending = async (docid,projectName)=>{
     var firestore = firebase.firestore();
     var doc = firestore.doc(docid);
    
-   var docs = await doc.collection('todos').where('status','==','pending').orderBy('datetime').get();
+   var docs = await doc.collection(projectName).where('status','==','pending').orderBy('datetime').get();
  
    return docs.docs;
 }
-const completed = async (docid)=>{
+const completed = async (docid,projectName)=>{
     var firestore = firebase.firestore();
     var doc = firestore.doc(docid);
-   var docs = await doc.collection('todos').where('status','==',"completed").orderBy('datetime').get();
+   var docs = await doc.collection(projectName).where('status','==',"completed").orderBy('datetime').get();
    return docs.docs;
 }
 const updateDoc = async (docid,vals)=>{
@@ -49,18 +64,19 @@ const deleteDoc = async (docid)=>{
    doc.delete();
 
 }
-const createTodo = async (todos,email)=>{
+const createTodo = async (todos,email,projectName)=>{
     var firestore = firebase.firestore();
     var doc = await firestore.collection('user').where("email","==",email).get();
     var ref = doc.docs[0];
-    ref.ref.collection("todos").add(todos);
+    ref.ref.collection(projectName).add(todos);
 }
 
 
 export default {
     createUser:createUser,
     createTodo:createTodo,
-  
+    createProject:createProject,
+    getProjects:getProjects,
     all:all,
     pending:pending,
     completed:completed,

@@ -12,7 +12,7 @@ const Login = (props)=>{
         
    if(window.localStorage.getItem("user")!=null)
    {
-       history.push('/home');
+       history.push('/project');
    }
     })();
     return (<div >
@@ -24,7 +24,7 @@ const Login = (props)=>{
             let authVal= await gitLogin();
            
             window.localStorage.setItem("user",authVal.user.email);
-            history.push('/home');
+            history.push('/project');
           
           
          }} style={{marginLeft:"29%"}} variant="outline-success">Auth With Git</Button>

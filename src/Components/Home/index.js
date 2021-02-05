@@ -22,7 +22,7 @@ export default class index extends Component {
     };
     componentDidMount() {
         (async () => {
-            var alltodos = await firebase_services.all(window.localStorage.getItem('docid'));
+            var alltodos = await firebase_services.all(window.localStorage.getItem('docid'),this.props.match.params.project);
             // var pendingtodos = await firebase_services.pending(window.localStorage.getItem("docid"));
             // var completedtodos = await firebase_services.completed(window.localStorage.getItem('docid'));
             var tempall = [];
@@ -47,7 +47,7 @@ export default class index extends Component {
 
             // });
             this.setState({ Loading: false });
-            firebase_services.realTime(window.localStorage.getItem("docid"), (snap) => {
+            firebase_services.realTime(window.localStorage.getItem("docid"), this.props.match.params.project,(snap) => {
                 snap.docChanges().forEach((value, index) => {
                     if ((value.doc.data()['status'] == "pending")&&(!this.state.deleteDoc)) {
 
@@ -112,7 +112,7 @@ export default class index extends Component {
             <Modal.Footer>
                 <Button onClick={(e) => {
                     this.setState({ show: false });
-                    firebase_services.createTodo({ todo: this.state.todo, deadline: this.state.deadline, status: "pending", datetime: Date.now() }, window.localStorage.getItem('user'))
+                    firebase_services.createTodo({ todo: this.state.todo, deadline: this.state.deadline, status: "pending", datetime: Date.now() }, window.localStorage.getItem('user'),this.props.match.params.project);
                 }}>Add</Button>
             </Modal.Footer>
         </Modal>);
